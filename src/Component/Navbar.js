@@ -4,15 +4,15 @@ import { NavLink, useSearchParams } from "react-router-dom";
 import { useEffect, useCallback } from "react";
 
 export default function Navbar() {
-  let [searchParams] = useSearchParams();
-  useEffect(() => {
-    if (searchParams?.get("referer")) {
-      sessionStorage.setItem(
-        "referer",
-        searchParams.get("referer").toLowerCase()
-      );
-    }
-  }, [searchParams]);
+  //   let [searchParams] = useSearchParams();
+  //   useEffect(() => {
+  //     if (searchParams?.get("referer")) {
+  //       sessionStorage.setItem(
+  //         "referer",
+  //         searchParams.get("referer").toLowerCase()
+  //       );
+  //     }
+  //   }, [searchParams]);
 
   const documentScroll = useCallback((event) => {
     event.preventDefault();
@@ -44,13 +44,13 @@ export default function Navbar() {
       >
         <div className="container-fluid">
           <div className="navbar-brand d-flex justify-content-between ">
-            <NavLink to="/">
+            <a to="/">
               <img
                 src="images/white-logo.png"
                 alt="Logo"
                 className="logoImage"
               />
-            </NavLink>
+            </a>
             <button
               className="navbar-toggler text-white"
               type="button"
@@ -72,24 +72,24 @@ export default function Navbar() {
           >
             <ul className="navbar-nav align-items-center ml-auto col-auto px-4">
               <li className="nav-item   me-3  ">
-                <NavLink className="nav-link" to="/">
+                <a className="nav-link" to="/">
                   <div className=" fw-bold text-white fs-6">Home</div>
-                </NavLink>
+                </a>
               </li>
               <li className="nav-item   me-3  ">
-                <NavLink className="nav-link" to="/pricing">
+                <a className="nav-link" to="/pricing">
                   <div className=" fw-bold text-white fs-6">Pricing</div>
-                </NavLink>
+                </a>
               </li>
               <li className="nav-item   me-3  ">
-                <NavLink className="nav-link" to="/faq">
+                <a className="nav-link" to="/faq">
                   <div className=" fw-bold text-white fs-6">FAQ</div>
-                </NavLink>
+                </a>
               </li>
               <li className="nav-item   me-3  ">
-                <NavLink className="nav-link" to="/Signup">
+                <a className="nav-link" to="/Signup">
                   <div className=" fw-bold text-white fs-6">Sign up!</div>
-                </NavLink>
+                </a>
               </li>
               <li className="nav-item   me-4  ">
                 <a
