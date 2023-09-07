@@ -1,0 +1,10 @@
+.privacy a,
+.privacy .link {
+  color: blue;
+  cursor: pointer;
+}
+
+.privacy a:hover,
+.privacy .link:hover {
+  color: #008e00;
+}
