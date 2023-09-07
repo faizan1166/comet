@@ -5,15 +5,11 @@ import Navbar from "./Component/Navbar";
 
 function App() {
   return (
-    <div className="App">
-
-      <header className="App-header">
-        <Navbar />
-        <Home />
-        <Features />
-      </header>
+    <div className="App" style={{ overflow: "hidden" }}>
+      <Navbar />
+      <Home />
+      <Features />
     </div>
-
   );
 }
 

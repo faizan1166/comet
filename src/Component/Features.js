@@ -67,8 +67,8 @@ function Features() {
   ];
   return (
     <>
-      <div className="container my-5">
-        <h1 className="py-5 text-center" style={{ color: "rgb(13, 204, 150)" }}>
+      <div className="container my-5 py-4">
+        <h1 className="pb-4 text-center" style={{ color: "rgb(13, 204, 150)" }}>
           Features of AI
         </h1>
         <div className="row g-5">
