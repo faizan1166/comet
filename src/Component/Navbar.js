@@ -6,7 +6,11 @@ import { Link } from "react-scroll";
 import { BsGridFill } from "react-icons/bs";
 import { Modal, Button, Form } from "react-bootstrap";
 import { auth } from "../Firebase"; // Import your Firebase configuration
-
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [backToTop, setBackToTop] = useState(false);
@@ -16,10 +20,12 @@ const Navbar = () => {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [toggleModal, setToggleModal] = useState(false);
+  const [signUpModal, setSignUpModal] = useState(false);
 
   const handleLogin = async () => {
     try {
-      await auth.signInWithEmailAndPassword(email, password);
+      await signInWithEmailAndPassword(auth, email, password);
       setShowLoginModal(false);
     } catch (error) {
       console.error("Login Error:", error.message);
@@ -28,7 +34,7 @@ const Navbar = () => {
 
   const handleSignup = async () => {
     try {
-      await auth.createUserWithEmailAndPassword(email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       setShowSignupModal(false);
     } catch (error) {
       console.error("Signup Error:", error.message);
@@ -138,27 +144,26 @@ const Navbar = () => {
               </Link>
             </li>
             <button
-              onClick={() => setShowLoginModal(true)}
+              onClick={() => {
+                setToggleModal(true);
+                setSignUpModal(false);
+              }}
               className="nav-link  "
             >
               Login
             </button>
-            <button
-              onClick={() => setShowSignupModal(true)}
-              className="nav-link  "
-            >
-              Signup
-            </button>
           </ul>
 
           <Modal
-            show={showLoginModal || showSignupModal}
-            onHide={() => setShowLoginModal(false) || setShowSignupModal(false)}
+            show={toggleModal}
+            onHide={() => setToggleModal(false)}
             dialogClassName="custom-modal"
             centered
           >
             <Modal.Header closeButton>
-              <Modal.Title>{showLoginModal ? "Login" : "Signup"}</Modal.Title>
+              <Modal.Title style={{ color: "rgb(13, 204, 150)" }}>
+                {signUpModal ? "Sign Up" : "Login"}
+              </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form>
@@ -179,24 +184,45 @@ const Navbar = () => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </Form.Group>
+                {signUpModal ? (
+                  <Form.Group controlId="formBasicPassword" className="ms-1">
+                    Have Not Account Yet?{" "}
+                    <a
+                      style={{ cursor: "pointer", color: "rgb(13, 204, 150)" }}
+                      onClick={() => setSignUpModal(!signUpModal)}
+                    >
+                      Sign Up
+                    </a>
+                  </Form.Group>
+                ) : (
+                  <Form.Group controlId="formBasicPassword" className="ms-1">
+                    Already Registred?{" "}
+                    <a
+                      style={{ cursor: "pointer", color: "rgb(13, 204, 150)" }}
+                      onClick={() => setSignUpModal(!signUpModal)}
+                    >
+                      Login
+                    </a>
+                  </Form.Group>
+                )}
               </Form>
             </Modal.Body>
             <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={() =>
-                  setShowLoginModal(false) || setShowSignupModal(false)
-                }
-              >
-                Close
-              </Button>
-              {showLoginModal ? (
-                <Button variant="primary" onClick={handleLogin}>
-                  Login
+              {signUpModal ? (
+                <Button
+                  className="border-0"
+                  style={{ backgroundColor: "rgb(13, 204, 150)" }}
+                  onClick={handleSignup}
+                >
+                  Signup
                 </Button>
               ) : (
-                <Button variant="primary" onClick={handleSignup}>
-                  Signup
+                <Button
+                  className="border-0"
+                  style={{ backgroundColor: "rgb(13, 204, 150)" }}
+                  onClick={handleLogin}
+                >
+                  Login
                 </Button>
               )}
             </Modal.Footer>

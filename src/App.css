@@ -22,7 +22,7 @@
 .custom-modal {
   max-width: 600px; /* Adjust the desired width */
   margin: 0 auto; /* Center horizontally */
-  margin-top: 100px; /* Adjust the desired top margin for vertical centering */
+  /* margin-top: 30px; */
 }
 
 .video-container {
@@ -55,4 +55,7 @@
   .home-img {
     display: none !important;
   }
+}
+.nav-link {
+  color: black !important;
 }
