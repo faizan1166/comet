@@ -1,108 +1,378 @@
-import "./navbar.css";
-import "../App.css";
-import { NavLink, useSearchParams } from "react-router-dom";
-import { useEffect, useCallback } from "react";
 
-export default function Navbar() {
-  //   let [searchParams] = useSearchParams();
-  //   useEffect(() => {
-  //     if (searchParams?.get("referer")) {
-  //       sessionStorage.setItem(
-  //         "referer",
-  //         searchParams.get("referer").toLowerCase()
-  //       );
-  //     }
-  //   }, [searchParams]);
 
-  const documentScroll = useCallback((event) => {
-    event.preventDefault();
-    let header = document.querySelector(".topnav");
-    let collapsehide = document.querySelector(".collapsehide");
 
-    if (window.scrollY > 50) {
-      header?.classList.add("custom-bg");
-      collapsehide?.classList.remove("show");
-    } else {
-      header?.classList.remove("custom-bg");
+import React, { useEffect, useState } from "react";
+import Logo from "../assets/200.gif";
+import { FaTimes  } from "react-icons/fa";
+import { HiArrowSmUp, HiMail } from "react-icons/hi";
+import { Link } from "react-scroll";
+import { BsGridFill } from "react-icons/bs";
+import { Modal, Button, Form } from 'react-bootstrap';
+import { auth } from '../Firebase'; // Import your Firebase configuration
+
+const Navbar = () => {
+  const [nav, setNav] = useState(false);
+  const [backToTop, setBackToTop] = useState(false);
+  const [showShadowNav, setShowShadowNav] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false); // Track if the modal is open
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      setShowLoginModal(false);
+    } catch (error) {
+      console.error('Login Error:', error.message);
     }
-  }, []);
+  };
+
+  const handleSignup = async () => {
+    try {
+      await auth.createUserWithEmailAndPassword(email, password);
+      setShowSignupModal(false);
+    } catch (error) {
+      console.error('Signup Error:', error.message);
+
+    }
+  };
 
   useEffect(() => {
-    document.addEventListener("scroll", documentScroll);
-    return () => {
-      document.removeEventListener("scroll", documentScroll);
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setBackToTop(true);
+        setShowShadowNav(true);
+      } else {
+        setBackToTop(false);
+        setShowShadowNav(false);
+      }
     };
-  }, [documentScroll]);
 
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const scrollUp = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const handleClick = () => {
+    setNav(!nav);
+    setBackToTop(false);
+  };
+
+ 
   return (
-    <div>
-      <nav
-        className={
-          "topnav navbar navbar-expand-md shadow justify-content-between justify-content-sm-start navbar-light"
-        }
-        id="sidenavAccordion"
-      >
-        <div className="container-fluid">
-          <div className="navbar-brand d-flex justify-content-between ">
-            <a to="/">
-              <img
-                src="images/white-logo.png"
-                alt="Logo"
-                className="logoImage"
-              />
-            </a>
-            <button
-              className="navbar-toggler text-white"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarTogglerDemo01"
-              aria-controls="navbarTogglerDemo01"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-              style={{ marginRight: 20 }}
-            >
-              <span className="navbar-toggler-icon navbar-dark"></span>
-            </button>
-          </div>
+    <nav
+    className={`navbar navbar-expand-md navbar-light bg-white text-black ${showShadowNav ? 'shadow' : ''}`}
 
-          <div
-            className="collapsehide collapse navbar-collapse"
-            id="navbarTogglerDemo01"
-            style={{ marginRight: 20 }}
-          >
-            <ul className="navbar-nav align-items-center ml-auto col-auto px-4">
-              <li className="nav-item   me-3  ">
-                <a className="nav-link" to="/">
-                  <div className=" fw-bold text-white fs-6">Home</div>
-                </a>
-              </li>
-              <li className="nav-item   me-3  ">
-                <a className="nav-link" to="/pricing">
-                  <div className=" fw-bold text-white fs-6">Pricing</div>
-                </a>
-              </li>
-              <li className="nav-item   me-3  ">
-                <a className="nav-link" to="/faq">
-                  <div className=" fw-bold text-white fs-6">FAQ</div>
-                </a>
-              </li>
-              <li className="nav-item   me-3  ">
-                <a className="nav-link" to="/Signup">
-                  <div className=" fw-bold text-white fs-6">Sign up!</div>
-                </a>
-              </li>
-              <li className="nav-item   me-4  ">
-                <a
-                  className="nav-link"
-                  href={`${process.env.REACT_APP_LOGIN_URL}`}
-                >
-                  <div className=" fw-bold text-white fs-6">Log In</div>
-                </a>
-              </li>
-            </ul>
-          </div>
+    >
+      <div className="container">
+        <a className="navbar-brand" href="/">
+          <img src={Logo} alt="logo" style={{ height:' 60px' ,width: "60px" }} />
+        </a>
+
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={handleClick}
+        >
+          {!nav ? <BsGridFill /> : <FaTimes />}
+        </button>
+
+        <div
+          className={
+            nav
+              ? "collapse navbar-collapse show"
+              : "collapse navbar-collapse"
+          }
+        >
+          <ul className="navbar-nav  ml-auto"  > 
+            <li className="nav-item">
+              <Link
+                to="home"
+                smooth={true}
+                duration={500}
+                className="nav-link"
+                onClick={handleClick}
+              >
+                Home
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                to="skill"
+                smooth={true}
+                duration={500}
+                className="nav-link"
+                onClick={handleClick}
+              >
+                About
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                to="about"
+                smooth={true}
+                duration={500}
+                className="nav-link"
+                onClick={handleClick}
+              >
+                Features
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                to="experience"
+                smooth={true}
+                duration={500}
+                className="nav-link"
+                onClick={handleClick}
+              >
+                Contact
+              </Link>
+            </li>
+            <button onClick={() => setShowLoginModal(true)} className="nav-link  ">
+        Login
+      </button>
+      <button onClick={() => setShowSignupModal(true)} className="nav-link  ">
+        Signup
+      </button>
+
+          </ul>
+       
+ 
+      <Modal
+        show={showLoginModal || showSignupModal}
+        onHide={() => setShowLoginModal(false) || setShowSignupModal(false)}
+        dialogClassName="custom-modal"
+        centered
+      >
+
+        <Modal.Header closeButton>
+          <Modal.Title>{showLoginModal ? 'Login' : 'Signup'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowLoginModal(false) || setShowSignupModal(false)}>
+            Close
+          </Button>
+          {showLoginModal ? (
+            <Button variant="primary" onClick={handleLogin}>
+              Login
+            </Button>
+          ) : (
+            <Button variant="primary" onClick={handleSignup}>
+              Signup
+            </Button>
+          )}
+        </Modal.Footer>
+      </Modal>
         </div>
-      </nav>
-    </div>
+      </div>
+      {backToTop && (
+        <div className="fixed-bottom ml-auto mb-3">
+          <button
+            onClick={scrollUp}
+            className="btn btn-light rounded-circle"
+          >
+            <HiArrowSmUp size={20} />
+          </button>
+
+        </div>
+      )}
+
+
+
+ 
+ 
+    </nav>
   );
-}
+};
+
+export default Navbar;
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useEffect, useState } from "react";
+// import Logo from "../assets/200.gif";
+// import { FaTimes  } from "react-icons/fa";
+// import { HiArrowSmUp, HiMail } from "react-icons/hi";
+// import { Link } from "react-scroll";
+// import { BsGridFill } from "react-icons/bs";
+
+
+// const Navbar = () => {
+//   const [nav, setNav] = useState(false);
+//   const [backToTop, setBackToTop] = useState(false);
+//   const [showShadowNav, setShowShadowNav] = useState(false);
+
+//   useEffect(() => {
+//     const handleScroll = () => {
+//       if (window.scrollY > 100) {
+//         setBackToTop(true);
+//         setShowShadowNav(true);
+//       } else {
+//         setBackToTop(false);
+//         setShowShadowNav(false);
+//       }
+//     };
+
+//     window.addEventListener("scroll", handleScroll);
+
+//     return () => {
+//       window.removeEventListener("scroll", handleScroll);
+//     };
+//   }, []);
+
+//   const scrollUp = () => {
+//     window.scrollTo({
+//       top: 0,
+//       behavior: "smooth",
+//     });
+//   };
+
+//   const handleClick = () => {
+//     setNav(!nav);
+//     setBackToTop(false);
+//   };
+
+//   return (
+//     <nav
+//     className={`navbar navbar-expand-md navbar-light bg-white text-black ${showShadowNav ? 'shadow' : ''}`}
+
+//     >
+//       <div className="container">
+//         <a className="navbar-brand" href="/">
+//           <img src={Logo} alt="logo" style={{ height:' 60px' ,width: "60px" }} />
+//         </a>
+
+//         <button
+//           className="navbar-toggler"
+//           type="button"
+//           onClick={handleClick}
+//         >
+//           {!nav ? <BsGridFill /> : <FaTimes />}
+//         </button>
+
+//         <div
+//           className={
+//             nav
+//               ? "collapse navbar-collapse show"
+//               : "collapse navbar-collapse"
+//           }
+//         >
+//           <ul className="navbar-nav  ml-auto" style={{marginLeft:"65%"}}> 
+//             <li className="nav-item">
+//               <Link
+//                 to="home"
+//                 smooth={true}
+//                 duration={500}
+//                 className="nav-link"
+//                 onClick={handleClick}
+//               >
+//                 Home
+//               </Link>
+//             </li>
+
+//             <li className="nav-item">
+//               <Link
+//                 to="skill"
+//                 smooth={true}
+//                 duration={500}
+//                 className="nav-link"
+//                 onClick={handleClick}
+//               >
+//                 About
+//               </Link>
+//             </li>
+
+//             <li className="nav-item">
+//               <Link
+//                 to="about"
+//                 smooth={true}
+//                 duration={500}
+//                 className="nav-link"
+//                 onClick={handleClick}
+//               >
+//                 Features
+//               </Link>
+//             </li>
+
+//             <li className="nav-item">
+//               <Link
+//                 to="experience"
+//                 smooth={true}
+//                 duration={500}
+//                 className="nav-link"
+//                 onClick={handleClick}
+//               >
+//                 Contact
+//               </Link>
+//             </li>
+
+//             <li className="nav-item">
+//               <Link
+//                 to="work"
+//                 smooth={true}
+//                 duration={500}
+//                 className="nav-link"
+//                 onClick={handleClick}
+//               >
+//                 Signup
+//               </Link>
+//             </li>
+
+  
+//           </ul>
+//         </div>
+//       </div>
+//       {backToTop && (
+//         <div className="fixed-bottom ml-auto mb-3">
+//           <button
+//             onClick={scrollUp}
+//             className="btn btn-light rounded-circle"
+//           >
+//             <HiArrowSmUp size={20} />
+//           </button>
+//         </div>
+//       )}
+
+   
+//     </nav>
+//   );
+// };
+
+// export default Navbar;
