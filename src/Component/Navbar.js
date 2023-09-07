@@ -1,5 +1,6 @@
 
 
+
 import React, { useEffect, useState } from "react";
 import Logo from "../assets/200.gif";
 import { FaTimes  } from "react-icons/fa";
@@ -34,6 +35,7 @@ const Navbar = () => {
       setShowSignupModal(false);
     } catch (error) {
       console.error('Signup Error:', error.message);
+
     }
   };
 
@@ -157,6 +159,7 @@ const Navbar = () => {
         dialogClassName="custom-modal"
         centered
       >
+
         <Modal.Header closeButton>
           <Modal.Title>{showLoginModal ? 'Login' : 'Signup'}</Modal.Title>
         </Modal.Header>
@@ -198,6 +201,7 @@ const Navbar = () => {
           >
             <HiArrowSmUp size={20} />
           </button>
+
         </div>
       )}
 
