@@ -1,28 +1,12 @@
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
-
-@layer base{
-    body{
-        @apply font-[Montserrat]
-    }
-    
-    li{
-        @apply px-4;
-        @apply cursor-pointer;
-    }
-}
-
-
- */
-/* In your CSS file */
 .custom-modal {
-  max-width: 600px; /* Adjust the desired width */
-  margin: 0 auto; /* Center horizontally */
-  /* margin-top: 30px; */
+  max-width: 600px;
+  margin: 0 auto;
+}
+.navbar {
+  background-color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .video-container {
@@ -47,15 +31,20 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Add an overlay color if needed */
+  background: rgba(0, 0, 0, 0.5);
 }
 
-/* Add any additional styles for your content here */
 @media (max-width: 767px) {
   .home-img {
     display: none !important;
   }
 }
 .nav-link {
+  cursor: pointer;
   color: black !important;
+  font-size: large;
+  font-family: 500 !important;
+}
+.navbar-collapse {
+  flex-grow: 0 !important;
 }
