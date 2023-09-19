@@ -1,6 +1,5 @@
 # Comit Project - About AI
 
-![Comit Logo](logo.png) <!-- Add your project logo here -->
 
 This project provides information about Artificial Intelligence (AI) using React.js and Bootstrap.
 
@@ -45,6 +44,8 @@ If you'd like to contribute to this project, please follow these steps:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-<img src="https://github.com/faizan1166/comet/assets/71093180/e5367ada-34ef-4938-8a0b-bbdbec4b88aa" height:"300px"/>
+## Screenshot
+
+<img src="https://github.com/faizan1166/comet/assets/71093180/e5367ada-34ef-4938-8a0b-bbdbec4b88aa" height="350" width='600'/>
 
 
